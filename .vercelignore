@@ -1,0 +1,14 @@
+node_modules
+.next
+.next-*
+.env*
+!.env.example
+.vercel
+coverage
+build
+out
+*.log
+*.tsbuildinfo
+.sixth
+.devserver.log
+.devserver.err.log
