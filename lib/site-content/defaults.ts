@@ -96,6 +96,7 @@ export const defaultSiteContent: SiteContent = {
       { label: "Facebook", url: "https://www.facebook.com/rtaskmanagement/" },
       { label: "LinkedIn", url: "https://www.linkedin.com/company/r-task-property-management-solutions/" },
       { label: "Instagram", url: "https://www.instagram.com/rtaskmanagement/" },
+      { label: "TikTok", url: "https://www.tiktok.com/@rtaskmanagement" },
     ],
     tagline: "Secure property workflows, tenant-safe records, and audit-ready delivery.",
     whatsApp: "+1 (501) 410-7833",

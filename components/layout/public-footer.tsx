@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook, Instagram, Linkedin, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Mail, MapPin, MessageCircle, Music2, Phone } from "lucide-react";
 
 import { BrandLockup } from "@/components/layout/brand-lockup";
 import type { SiteContent } from "@/types/site-content";
@@ -8,6 +8,7 @@ const socialIconMap = {
   Facebook,
   Instagram,
   LinkedIn: Linkedin,
+  TikTok: Music2,
   WhatsApp: MessageCircle,
 };
 
