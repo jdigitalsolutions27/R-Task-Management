@@ -239,6 +239,11 @@ const siteSocialLinkSchema = z.object({
 
 export const siteContentSchema = z.object({
   header: z.object({
+    brand: z.object({
+      subtitle: z.string().trim().min(1, "Enter a brand subtitle."),
+      title: z.string().trim().min(1, "Enter a brand title."),
+    }),
+    navLinks: z.array(siteLinkSchema).min(1),
     portalCta: siteLinkSchema,
   }),
   about: z.object({
@@ -282,6 +287,8 @@ export const siteContentSchema = z.object({
     address: z.string().trim().min(1, "Enter a footer address."),
     backgroundImage: siteImageSchema,
     email: z.email("Enter a valid footer email."),
+    legalLine: z.string().trim().min(1, "Enter the footer legal line."),
+    navLinks: z.array(siteLinkSchema).min(1),
     phone: z.string().trim().min(1, "Enter a footer phone number."),
     responseNote: z.string().trim().min(1, "Enter a response note."),
     socials: z.array(siteSocialLinkSchema).min(1),

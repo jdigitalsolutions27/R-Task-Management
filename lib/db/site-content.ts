@@ -14,6 +14,11 @@ function mergeSiteContent(content: Partial<SiteContent> | null | undefined): Sit
     header: {
       ...defaultSiteContent.header,
       ...content?.header,
+      brand: {
+        ...defaultSiteContent.header.brand,
+        ...content?.header?.brand,
+      },
+      navLinks: content?.header?.navLinks ?? defaultSiteContent.header.navLinks,
       portalCta: {
         ...defaultSiteContent.header.portalCta,
         ...content?.header?.portalCta,
@@ -68,6 +73,7 @@ function mergeSiteContent(content: Partial<SiteContent> | null | undefined): Sit
         ...defaultSiteContent.footer.backgroundImage,
         ...content?.footer?.backgroundImage,
       },
+      navLinks: content?.footer?.navLinks ?? defaultSiteContent.footer.navLinks,
       socials: content?.footer?.socials ?? defaultSiteContent.footer.socials,
     },
     home: {

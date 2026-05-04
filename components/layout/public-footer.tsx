@@ -12,8 +12,10 @@ const socialIconMap = {
 };
 
 export function PublicFooter({
+  brand,
   content,
 }: {
+  brand: SiteContent["header"]["brand"];
   content: SiteContent["footer"];
 }) {
   return (
@@ -28,7 +30,11 @@ export function PublicFooter({
       <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#0F172A]/95 to-[#0F172A]/88" />
       <div className="relative mx-auto grid max-w-7xl gap-10 px-6 py-12 text-sm text-slate-300 md:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
         <div className="space-y-4">
-          <BrandLockup compact />
+          <BrandLockup
+            compact
+            subtitle={brand.subtitle}
+            title={brand.title}
+          />
           <p className="max-w-sm leading-6">{content.tagline}</p>
         </div>
 
@@ -83,20 +89,16 @@ export function PublicFooter({
             })}
           </div>
           <nav className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold">
-            <Link className="transition-colors hover:text-white" href="/about">
-              About
-            </Link>
-            <Link className="transition-colors hover:text-white" href="/services">
-              Services
-            </Link>
-            <Link className="transition-colors hover:text-white" href="/contact">
-              Contact
-            </Link>
+            {content.navLinks.map((link) => (
+              <Link className="transition-colors hover:text-white" href={link.href} key={`${link.label}-${link.href}`}>
+                {link.label}
+              </Link>
+            ))}
           </nav>
         </div>
       </div>
       <div className="relative border-t border-white/10 bg-[#0F172A]/75 px-6 py-4 text-center text-xs text-slate-400">
-        &copy; {new Date().getFullYear()} R-Task Management Property Solution. All rights reserved.
+        &copy; {new Date().getFullYear()} {content.legalLine}
       </div>
     </footer>
   );

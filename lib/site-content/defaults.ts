@@ -2,6 +2,16 @@ import type { SiteContent } from "@/types/site-content";
 
 export const defaultSiteContent: SiteContent = {
   header: {
+    brand: {
+      subtitle: "Property Solution",
+      title: "R-TASK MANAGEMENT",
+    },
+    navLinks: [
+      { href: "/", label: "Home" },
+      { href: "/about", label: "About" },
+      { href: "/services", label: "Services" },
+      { href: "/contact", label: "Contact" },
+    ],
     portalCta: {
       href: "/login",
       label: "Client Portal",
@@ -74,6 +84,12 @@ export const defaultSiteContent: SiteContent = {
       url: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=75",
     },
     email: "rtaskmanagement@gmail.com",
+    legalLine: "R-Task Management Property Solution. All rights reserved.",
+    navLinks: [
+      { href: "/about", label: "About" },
+      { href: "/services", label: "Services" },
+      { href: "/contact", label: "Contact" },
+    ],
     phone: "+1 (501) 410-7833",
     responseNote: "We respond within 24 hours.",
     socials: [

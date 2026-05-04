@@ -183,19 +183,25 @@ export async function updatePlatformCompany(companyId: string, input: CompanySet
 
 export async function deletePlatformCompany(companyId: string) {
   const admin = createAdminSupabaseClient();
-  const dependencyTables = [
-    "users",
+  const blockingTables = [
     "properties",
     "files",
     "inspections",
     "reports",
     "evictions",
     "support_tickets",
-    "company_invite_codes",
   ] as const;
+  const blockingLabels: Record<(typeof blockingTables)[number], string> = {
+    properties: "property",
+    files: "file",
+    inspections: "inspection",
+    reports: "report",
+    evictions: "eviction record",
+    support_tickets: "support ticket",
+  };
 
   const checks = await Promise.all(
-    dependencyTables.map((table) =>
+    blockingTables.map((table) =>
       admin.from(table).select("*", { count: "exact", head: true }).eq("company_id", companyId),
     ),
   );
@@ -205,13 +211,48 @@ export async function deletePlatformCompany(companyId: string) {
     throw new AppError("Unable to verify company dependencies.", 500);
   }
 
-  const hasDependencies = checks.some((result) => (result.count ?? 0) > 0);
+  const blockingDependencies = blockingTables
+    .map((table, index) => ({
+      count: checks[index]?.count ?? 0,
+      label: blockingLabels[table],
+    }))
+    .filter((item) => item.count > 0);
 
-  if (hasDependencies) {
+  if (blockingDependencies.length) {
+    const dependencySummary = blockingDependencies
+      .map(({ count, label }) => `${count} ${label}${count === 1 ? "" : "s"}`)
+      .join(", ");
+
     throw new AppError(
-      "This company already has users or operational records. Remove the linked data before deleting it.",
+      `This company can't be deleted yet. Remove the linked items first: ${dependencySummary}.`,
       409,
     );
+  }
+
+  const { data: companyUsers, error: usersError } = await admin
+    .from("users")
+    .select("id")
+    .eq("company_id", companyId);
+
+  if (usersError) {
+    throw new AppError("Unable to load the company accounts for cleanup.", 500);
+  }
+
+  for (const user of companyUsers ?? []) {
+    const { error: authError } = await admin.auth.admin.deleteUser(user.id);
+
+    if (authError && !/user not found/i.test(authError.message)) {
+      throw new AppError("Unable to remove one of the company login accounts.", 500);
+    }
+  }
+
+  const { error: profileDeleteError } = await admin
+    .from("users")
+    .delete()
+    .eq("company_id", companyId);
+
+  if (profileDeleteError) {
+    throw new AppError("The company accounts could not be fully removed.", 500);
   }
 
   const { error } = await admin.from("companies").delete().eq("id", companyId);

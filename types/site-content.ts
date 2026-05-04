@@ -25,6 +25,11 @@ export interface SiteSocialLink {
 
 export interface SiteContent {
   header: {
+    brand: {
+      subtitle: string;
+      title: string;
+    };
+    navLinks: SiteLinkContent[];
     portalCta: SiteLinkContent;
   };
   about: {
@@ -68,6 +73,8 @@ export interface SiteContent {
     address: string;
     backgroundImage: SiteImageContent;
     email: string;
+    legalLine: string;
+    navLinks: SiteLinkContent[];
     phone: string;
     responseNote: string;
     socials: SiteSocialLink[];

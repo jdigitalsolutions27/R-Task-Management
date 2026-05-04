@@ -3,10 +3,14 @@ import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 
 export function BrandLockup({
+  title = "R-TASK MANAGEMENT",
+  subtitle = "Property Solution",
   className,
   compact = false,
   hideTextOnSmall = false,
 }: {
+  title?: string;
+  subtitle?: string;
   className?: string;
   compact?: boolean;
   hideTextOnSmall?: boolean;
@@ -23,10 +27,10 @@ export function BrandLockup({
       />
       <div className={cn("leading-tight", hideTextOnSmall ? "hidden sm:block" : "")}>
         <p className={cn("font-bold text-white", compact ? "text-xs" : "text-sm")}>
-          R-TASK MANAGEMENT
+          {title}
         </p>
         <p className={cn("font-medium text-[#C9A646]", compact ? "text-xs" : "text-sm")}>
-          Property Solution
+          {subtitle}
         </p>
       </div>
     </div>

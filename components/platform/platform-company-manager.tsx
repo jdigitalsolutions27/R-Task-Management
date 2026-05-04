@@ -157,7 +157,11 @@ export function PlatformCompanyManager({
   }
 
   async function deleteCompany(companyId: string) {
-    if (!window.confirm("Delete this company? This only works if there are no linked users or records.")) {
+    if (
+      !window.confirm(
+        "Delete this company? If there are no linked workflow records left, the company and its remaining company login accounts will be removed.",
+      )
+    ) {
       return;
     }
 
@@ -327,6 +331,9 @@ export function PlatformCompanyManager({
             <p className="mt-1 text-sm text-slate-500">
               Review every tenant using the platform, resend onboarding emails, and keep company access clean.
             </p>
+            <p className="mt-2 text-xs font-medium text-slate-400">
+              Deleting a company also clears its remaining company login accounts. Workflow records like files, properties, inspections, reports, evictions, and support tickets must be cleared first.
+            </p>
           </div>
           <Input
             className="w-full md:max-w-sm"
@@ -446,7 +453,13 @@ export function PlatformCompanyManager({
                           <Pencil className="h-4 w-4" />
                           Edit
                         </Button>
-                        <Button onClick={() => deleteCompany(company.id)} size="sm" type="button" variant="outline">
+                        <Button
+                          className="border-rose-300 bg-rose-50 text-rose-700 hover:border-rose-400 hover:bg-rose-100 hover:text-rose-800"
+                          onClick={() => deleteCompany(company.id)}
+                          size="sm"
+                          type="button"
+                          variant="outline"
+                        >
                           <Trash2 className="h-4 w-4" />
                           Delete
                         </Button>

@@ -79,7 +79,7 @@ const contentSections: Array<{
     title: "Contact page content",
   },
   {
-    description: "Edit footer contact details, social links, and the footer background image.",
+    description: "Edit footer brand text, contact details, navigation links, socials, legal text, and the footer background image.",
     href: "/",
     icon: LayoutTemplate,
     key: "footer",
@@ -274,6 +274,56 @@ function SocialLinksEditor({ items, onChange }: { items: SiteSocialLink[]; onCha
             }
             placeholder="https://..."
             value={item.url}
+          />
+          <div className="flex items-start justify-end">
+            <Button
+              onClick={() => onChange(items.filter((_, currentIndex) => currentIndex !== index))}
+              size="sm"
+              type="button"
+              variant="outline"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function LinkListEditor({ items, label, onChange }: { items: SiteContent["header"]["navLinks"]; label: string; onChange: (next: SiteContent["header"]["navLinks"]) => void }) {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <label className="text-sm font-semibold text-[#111827]">{label}</label>
+        <Button onClick={() => onChange([...items, { href: "/", label: "" }])} size="sm" type="button" variant="outline">
+          <Plus className="h-4 w-4" />
+          Add link
+        </Button>
+      </div>
+      {items.map((item, index) => (
+        <div className="grid gap-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-4 lg:grid-cols-[0.7fr_1.3fr_auto]" key={`link-${label}-${index}`}>
+          <Input
+            onChange={(event) =>
+              onChange(
+                items.map((current, currentIndex) =>
+                  currentIndex === index ? { ...current, label: event.target.value } : current,
+                ),
+              )
+            }
+            placeholder="Label"
+            value={item.label}
+          />
+          <Input
+            onChange={(event) =>
+              onChange(
+                items.map((current, currentIndex) =>
+                  currentIndex === index ? { ...current, href: event.target.value } : current,
+                ),
+              )
+            }
+            placeholder="/about"
+            value={item.href}
           />
           <div className="flex items-start justify-end">
             <Button
@@ -486,9 +536,27 @@ export function SiteContentManager({ initialContent }: { initialContent: SiteCon
         <Card>
           <CardHeader>
             <SectionIntro kicker="Header" title="Top navigation call to action" />
-            <CardDescription>Edit the main portal button shown in the website header.</CardDescription>
+            <CardDescription>Edit the public brand name, navigation labels, and main portal button shown in the website header.</CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-4 lg:grid-cols-2">
+          <CardContent className="space-y-6">
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Input
+                onChange={(event) => updateDraft((next) => { next.header.brand.title = event.target.value; })}
+                placeholder="Brand title"
+                value={draft.header.brand.title}
+              />
+              <Input
+                onChange={(event) => updateDraft((next) => { next.header.brand.subtitle = event.target.value; })}
+                placeholder="Brand subtitle"
+                value={draft.header.brand.subtitle}
+              />
+            </div>
+            <LinkListEditor
+              label="Header navigation links"
+              items={draft.header.navLinks}
+              onChange={(items) => updateDraft((next) => { next.header.navLinks = items; })}
+            />
+            <div className="grid gap-4 lg:grid-cols-2">
             <Input
               onChange={(event) => updateDraft((next) => { next.header.portalCta.label = event.target.value; })}
               placeholder="Header portal button label"
@@ -499,6 +567,7 @@ export function SiteContentManager({ initialContent }: { initialContent: SiteCon
               placeholder="Header portal button link"
               value={draft.header.portalCta.href}
             />
+            </div>
           </CardContent>
         </Card>
       ) : null}
@@ -687,9 +756,21 @@ export function SiteContentManager({ initialContent }: { initialContent: SiteCon
         <Card>
           <CardHeader>
             <SectionIntro kicker="Footer" title="Footer information and social links" />
-            <CardDescription>Keep the website footer polished with current contact details, social links, and background imagery.</CardDescription>
+            <CardDescription>Keep the website footer polished with editable brand text, contact details, navigation links, legal text, and background imagery.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Input
+                value={draft.header.brand.title}
+                onChange={(event) => updateDraft((next) => { next.header.brand.title = event.target.value; })}
+                placeholder="Website brand title"
+              />
+              <Input
+                value={draft.header.brand.subtitle}
+                onChange={(event) => updateDraft((next) => { next.header.brand.subtitle = event.target.value; })}
+                placeholder="Website brand subtitle"
+              />
+            </div>
             <Textarea className="min-h-24" value={draft.footer.tagline} onChange={(event) => updateDraft((next) => { next.footer.tagline = event.target.value; })} placeholder="Footer tagline" />
             <div className="grid gap-4 lg:grid-cols-2">
               <Input value={draft.footer.address} onChange={(event) => updateDraft((next) => { next.footer.address = event.target.value; })} placeholder="Footer address" />
@@ -697,7 +778,13 @@ export function SiteContentManager({ initialContent }: { initialContent: SiteCon
               <Input value={draft.footer.phone} onChange={(event) => updateDraft((next) => { next.footer.phone = event.target.value; })} placeholder="Footer phone number" />
               <Input value={draft.footer.whatsApp} onChange={(event) => updateDraft((next) => { next.footer.whatsApp = event.target.value; })} placeholder="Footer WhatsApp number" />
               <Input value={draft.footer.responseNote} onChange={(event) => updateDraft((next) => { next.footer.responseNote = event.target.value; })} placeholder="Footer response note" />
+              <Input value={draft.footer.legalLine} onChange={(event) => updateDraft((next) => { next.footer.legalLine = event.target.value; })} placeholder="Footer legal line" />
             </div>
+            <LinkListEditor
+              label="Footer navigation links"
+              items={draft.footer.navLinks}
+              onChange={(items) => updateDraft((next) => { next.footer.navLinks = items; })}
+            />
             <SocialLinksEditor items={draft.footer.socials} onChange={(items) => updateDraft((next) => { next.footer.socials = items; })} />
             <ImageField
               folder="footer/background"

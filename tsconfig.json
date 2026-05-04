@@ -38,7 +38,9 @@
     ".next-company-fix/types/**/*.ts",
     ".next-company-fix/dev/types/**/*.ts",
     ".next-signup-fix/types/**/*.ts",
-    ".next-signup-fix/dev/types/**/*.ts"
+    ".next-signup-fix/dev/types/**/*.ts",
+    ".next-release-footer/types/**/*.ts",
+    ".next-release-footer/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

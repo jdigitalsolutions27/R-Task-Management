@@ -15,7 +15,7 @@ export default async function PublicLayout({ children }: { children: ReactNode }
       <PasswordRecoveryRedirect />
       <PublicHeader content={siteContent.header} />
       <main>{children}</main>
-      <PublicFooter content={siteContent.footer} />
+      <PublicFooter brand={siteContent.header.brand} content={siteContent.footer} />
     </div>
   );
 }

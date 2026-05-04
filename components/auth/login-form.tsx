@@ -119,18 +119,25 @@ export function LoginForm({
     setRecoverySuccessMessage(null);
 
     try {
-      const supabase = createBrowserSupabaseClient();
-      const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+      const response = await fetch("/api/auth/password-recovery", {
+        body: JSON.stringify(values),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
       });
 
-      if (error) {
-        setRecoveryErrorMessage(error.message);
+      const payload = (await response.json()) as { data?: { message?: string }; error?: string };
+
+      if (!response.ok) {
+        setRecoveryErrorMessage(payload.error ?? "Unable to send the password reset email.");
         setIsRecoverySubmitting(false);
         return;
       }
 
-      setRecoverySuccessMessage("Check your email for a password reset link.");
+      setRecoverySuccessMessage(
+        payload.data?.message ?? "If that email is registered, a password reset link is on the way.",
+      );
     } catch (error) {
       setRecoveryErrorMessage(
         error instanceof Error
